@@ -1,36 +1,114 @@
 Once you've compiled the server core, there are still a number of steps you must go through before being able to start your server.
 
-## 1. Copying the dependencies
-
-The first thing to do after compiling the core is to copy over the dependencies you used to build it. Go to _C:\ACE_wrappers\lib_ and copy _ACE.dll_ to the main server folder.
-
-Now you need to do the same for TBB. Since we didn't need to build TBB ourselves, it comes with multiple versions of the dlls for every platform and version of Visual Studio. Go to _C:\tbb\bin_ and then into either _ia32_ if you compiled for x86, or into _intel64_ if you targeted x64 instead. Inside there you will see a folder for every version of Visual Studio. You need the 2015 dlls, which are inside the _vc14_ folder. Copy all dll files from there and paste them in the main server folder like you did with ACE.
-
-## 2. Extracting data from the client
+## 1. Extracting data from the client
 
 The server requires a large amount of data from the client in order to operate. That includes DBC, Map, VMap and MMap files. To extract all that data you need extractors. You can compile them yourself by selecting the _USE_EXTRACTORS_ option when configuring in CMake. Alternatively you can download all the required files from the internet.
 
-Now that you have the extractors, place them together with the dependency dlls into your World of Warcraft 1.12.1 game folder. There is a separate extractor for everything. You must run them in the following older, and wait for each one to complete before starting the next extractor.
+#### Windows Guide:
+1. **Locate your WoW 1.12.1 client folder**  
+   Verify it's build **5875** (bottom-left corner of the login screen).
 
-- _mapextractor.exe_
+2. **Copy the extractors and dependencies**  
+   Place these files in your World of Warcraft 1.12.1 game folder:  
+   - `mapextractor.exe`  
+   - `vmapextractor.exe`  
+   - `vmap_assembler.exe`  
+   - `MoveMapGen.exe`  
+   - Any required DLLs from the build output.
 
-This is will extract the dbc and map files.
+3. **Run the extractors by double-clicking (in order)**  
+   Open the WoW folder in File Explorer and double-click each one:
 
-- _vmapextractor.exe_
+   1. Double-click `mapextractor.exe`  
+      → This is will extract the dbc and map files.
 
-This will extract the raw visual map files.
+   2. Double-click `vmapextractor.exe`  
+      → This will extract the raw visual map files.
 
-- _vmap_assembler.exe_
+   3. Double-click `vmap_assembler.exe`  
+      → This will convert the vmaps into a usable format.
 
-This will convert the vmaps into a usable format.
+   4. Double-click `MoveMapGen.exe`  
+      → This will generate movement maps, so that creatures can navigate all the map geometry properly.
+      This is an optional step and it takes a very long time to complete. Be prepared to that it may take between 30 min or hours for it to finish.
 
-- _MoveMapGen.exe_
+      If you choose to skip generating movement maps, mobs will chase their target in a straight line and things like fear movement will not work. If you get an error saying the "mmaps" folder does           not        exist when running the extractor, just create it yourself.
 
-This will generate movement maps, so that creatures can navigate all the map geometry properly. This is an optional step and it takes a very long time to complete. Be prepared to wait several hours for it to finish. If you choose to skip generating movement maps, mobs will chase their target in a straight line and things like fear movement will not work. If you get an error saying the "mmaps" folder does not exist when running the extractor, just create it yourself.
+4. **Move extracted folders to your server**  
+   Copy from WoW folder: `maps`, `vmaps`, `mmaps` (if created), `dbc`  
+   Paste into server data directory (example: `C:\vmangos\data\`)
 
-Once you've extracted everything, move the "dbc", "maps", "vmaps" and "mmaps" folders over to your server directory. The "Buildings" folder is not needed and can be deleted safely.
+5. **Organize DBC for build 5875**  
+   Rename/move `dbc` → `5875/dbc`  
+   Example final path: `C:\vmangos\data\5875\dbc\`
+   
+   The build number of the 1.12.1 client is 5875.
 
-Note that the dbc path must also include the build number of the client from which the files were extracted. If you are unsure what is the exact build, you can see it in the lower left corner of the login screen. The build number of the 1.12.1 client is 5875.
+7. **Cleanup**  
+   Delete `Buildings/` and `Cameras/` (if present) from the WoW folder.
+
+#### Linux Guide
+
+1. **Locate your WoW 1.12.1 client folder**  
+   Verify it's build **5875** (bottom-left corner of the login screen).
+
+2. **Set your WoW path** (edit once)
+
+   ```bash
+   set WOW_PATH '/home/yourname/games/World of Warcraft'
+   ```
+   Change it to your actual path.
+
+3. **Run extraction (separate commands – run in order)**
+
+   Create the target data directory:
+   ```bash
+   mkdir -p ~/vmangos/data/5875
+   ```
+   Go into data folder:
+   ```bash
+   cd ~/vmangos/data
+   ```
+
+   Extract maps and DBC:
+   ```bash
+   ~/vmangos/bin/Extractors/MapExtractor -i "$WOW_PATH" -o ~/vmangos/data -e 7
+   ```
+
+   Move the DBC folder into the version‑specific subdirectory:
+   ```bash
+   mv ~/vmangos/data/dbc ~/vmangos/data/5875/dbc
+   ```
+
+   Extract raw vmap data:
+   ```bash
+   ~/vmangos/bin/Extractors/VMapExtractor -d "$WOW_PATH/Data"
+   ```
+
+   Build final vmaps:
+   ```bash
+   ~/vmangos/bin/Extractors/VMapAssembler
+   ```
+
+   Generate movement maps (adjust thread count automatically):
+   ```bash
+   ~/vmangos/bin/Extractors/MoveMapGenerator --threads "$(nproc)" --silent --configInputPath ~/vmangos/bin/Extractors/config.json --offMeshInput ~/vmangos/bin/Extractors/offmesh.txt
+   ```
+
+   Clean up unused folders:
+   ```bash
+   rm -rf ~/vmangos/data/{Buildings,Cameras}
+   ```
+
+5. **Final structure**
+
+   ```
+   ~/vmangos/data/
+   ├── 5875/dbc/
+   ├── maps/
+   ├── vmaps/
+   └── mmaps/
+   ```
 
 ## 3. Setting up the database
 
