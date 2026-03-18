@@ -63,14 +63,17 @@ Account, character and game data is stored inside the database, so we need Maria
 ### Debian, Ubuntu
 ```
 sudo apt-get install mariadb-server libmariadb-dev
+systemctl enable --now mariadb.service
 ```
 ### Arch
 ```
 sudo pacman -S mariadb mariadb-libs
+systemctl enable --now mariadb.service
 ```
 ### Fedora
 ```
 sudo dnf install mariadb-server mariadb-devel
+systemctl enable --now mariadb.service
 ```
 
 ## 7. Installing OpenSSL
