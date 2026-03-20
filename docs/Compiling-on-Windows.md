@@ -27,6 +27,10 @@ You should now find the solution file inside the "build" folder.
 
 Go to "build" and open the "MaNGOS.sln" project in Visual Studio. The first thing you need to do after loading the solution file is to change the configuration to Release. Then simply right click on ALL_BUILD, press Build and wait.
 
+Go to the next tutorial to learn how to setup your database and extract data files.
+
 ![](https://i.imgur.com/FJg0maH.gif)
 
 When it finishes building, right click on INSTALL and press build again. You will now find the compiled server binaries inside the install directory you specified when configuring with CMake.
+
+Go to the [next tutorial](Getting-it-working-Windows.md) to learn how to setup your database and extract data files.
