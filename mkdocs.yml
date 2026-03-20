@@ -1,7 +1,7 @@
 site_name: VMaNGOS Wiki
-site_url: https://daribon.github.io/Wikitest/
-repo_url: https://github.com/Daribon/Vanilla-Screenshot-Archive
-edit_uri: https://github.com/Daribon/Wikitest/edit/main/docs/
+site_url: https://vmangos.github.io/wiki/
+repo_url: https://github.com/vmangos/core
+edit_uri: https://github.com/vmangos/wiki/edit/master/docs/
 theme:
   name: material
   language: en
