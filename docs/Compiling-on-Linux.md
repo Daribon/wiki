@@ -156,4 +156,4 @@ make install
 
 Congratulations! You should now be able to find the compiled binaries inside the `vmangos` directory.
 
-Go to the [next tutorial](Getting-it-working.md) to learn how to setup your database.
+Go to the [next tutorial](Getting-it-working-Linux.md) to learn how to setup your database and extract data files.
