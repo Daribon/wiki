@@ -101,7 +101,7 @@ You have two options: import a fully updated database (recommended) or import th
 #### Option A: Import the latest database with migrations pre‑applied (fast)
 
 ```bash
-ZIP_URL=$(curl -s https://api.github.com/repos/vmangos/core/releases/tags/db_latest | grep -o '"name": "db-[0-9a-f]*\.zip"' | sed 's/"name": "\([^"]*\)"/\1/' | head -n1 | sed 's|^|https://github.com/vmangos/core/releases/download/db_latest/|') && wget -qO /tmp/db-latest.zip "$ZIP_URL" && 7z x /tmp/db-latest.zip -o/tmp/ -y && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M realmd < /tmp/db_dump/logon.sql && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M characters < /tmp/db_dump/characters.sql && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M mangos < /tmp/db_dump/mangos.sql && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M logs < /tmp/db_dump/logs.sql
+ZIP_URL=$(curl -s https://api.github.com/repos/vmangos/core/releases/tags/db_latest | grep -o '"name": "db-[0-9a-f]*\.zip"' | sed 's/"name": "\([^"]*\)"/\1/' | head -n1 | sed 's|^|https://github.com/vmangos/core/releases/download/db_latest/|') && wget -qO /tmp/db-latest.zip "$ZIP_URL" && 7z x /tmp/db-latest.zip -o/tmp/ -y && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M realmd < /tmp/mysql-dump/logon.sql && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M characters < /tmp/mysql-dump/characters.sql && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M mangos < /tmp/mysql-dump/mangos.sql && mariadb -u"${DB_USER}" -p"${DB_PASS}" --max-allowed-packet=256M logs < /tmp/mysql-dump/logs.sql
 ```
 
 After this, you can skip to **Step 3**.
