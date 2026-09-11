@@ -60,7 +60,6 @@ nav:
 - Setup Guides:
   - Compiling on Windows: Compiling-on-Windows.md
   - Compiling on Linux: Compiling-on-Linux.md
-  - Devuan Install Guide: Devuan-install-guide.md
   - Getting it Working (Windows): Getting-it-working-Windows.md
   - Getting it Working (Linux): Getting-it-working-Linux.md
 - Core Systems:
